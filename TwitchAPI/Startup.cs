@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TwitchAPI.Models;
 using TwitchAPI.Services;
 
 namespace TwitchAPI
@@ -34,9 +35,15 @@ namespace TwitchAPI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			services.Configure<FollowerGoalConfiguration>(Configuration.GetSection("FollowerGoal"));
+
 			var svc = new Services.TwitchService(Configuration);
 			services.AddSingleton<IHostedService>(svc);
 			services.AddSingleton(svc);
+
+			var mrx = new Services.MixerService(Configuration);
+			services.AddSingleton<IHostedService>(mrx);
+			services.AddSingleton(mrx);
 
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -48,6 +55,7 @@ namespace TwitchAPI
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
+				//app.UseBrowserLink();
 			}
 			else
 			{

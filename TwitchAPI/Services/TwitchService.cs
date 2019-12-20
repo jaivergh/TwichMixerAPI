@@ -40,6 +40,7 @@ namespace TwitchAPI.Services
 
 		private async Task StartTwitchMonitoring()
 		{
+			return;
 			string clientId = Configuration["StreamServices:Twitch:ClientId"];
 			var twitchApi = new TwitchLib.Api.TwitchAPI();
 			try
