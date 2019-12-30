@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using TwitchAPI.Hubs;
 using TwitchAPI.Models;
 using TwitchAPI.Services;
 
@@ -28,25 +30,7 @@ namespace TwitchAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.Configure<CookiePolicyOptions>(options =>
-			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
-				options.CheckConsentNeeded = context => true;
-				options.MinimumSameSitePolicy = SameSiteMode.None;
-			});
-
-			services.Configure<FollowerGoalConfiguration>(Configuration.GetSection("FollowerGoal"));
-
-			var svc = new Services.TwitchService(Configuration);
-			services.AddSingleton<IHostedService>(svc);
-			services.AddSingleton(svc);
-
-			var mrx = new Services.MixerService(Configuration);
-			services.AddSingleton<IHostedService>(mrx);
-			services.AddSingleton(mrx);
-
-
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			TwitchAPI.StartupServices.ConfigureServices.Execute(services, Configuration);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +50,12 @@ namespace TwitchAPI
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
+
+			app.UseSignalR(configure =>
+			{
+				configure.MapHub<FollowerHub>("/followerstream");
+			}
+			);
 
 			app.UseMvc(routes =>
 			{

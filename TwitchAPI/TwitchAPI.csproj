@@ -9,9 +9,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
     <PackageReference Include="mixer-client-csharp" Version="0.8.4.12-beta" />
+    <PackageReference Include="System.IO.Abstractions" Version="7.1.1" />
     <PackageReference Include="TwitchLib" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>

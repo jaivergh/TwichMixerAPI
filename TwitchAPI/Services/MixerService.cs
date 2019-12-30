@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Mixer.Base;
 using Mixer.Base.Model.Channel;
 using System;
@@ -13,6 +14,8 @@ namespace TwitchAPI.Services
 	{
 		private IConfiguration Configuration;
 
+		public ILogger Logger { get; }
+
 		private static readonly List<OAuthClientScopeEnum> _scopes = new List<OAuthClientScopeEnum>()
 		{
 			OAuthClientScopeEnum.channel__details__self,
@@ -20,14 +23,17 @@ namespace TwitchAPI.Services
 
 		};
 
-		public MixerService(IConfiguration configuration)
+		public MixerService(IConfiguration configuration, ILoggerFactory loggerFactory)
 		{
 			this.Configuration = configuration;
+			this.Logger = loggerFactory.CreateLogger("StreamServices");
 		}
 
 		private ExpandedChannelModel _MyChannel;
 		private static int _CurrentFollowerCount;
 		private Timer _Timer;
+
+		public event EventHandler Updated;
 
 		public int CurrentFollowerCount { get { return _CurrentFollowerCount; } }
 
@@ -53,6 +59,7 @@ namespace TwitchAPI.Services
 
 		private void NewFollowerCheck(object state)
 		{
+			Updated?.Invoke(this, EventArgs.Empty);
 			_CurrentFollowerCount = Interlocked.Exchange(ref _CurrentFollowerCount, (int)_MyChannel.numFollowers);
 		}
 
