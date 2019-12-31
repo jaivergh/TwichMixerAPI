@@ -79,5 +79,11 @@ namespace TwitchAPI.Controllers
 				GoalValue = goal
 			});
 		}
+
+		[Route("followers/goal/preview")]
+		public IActionResult PreviewGoal()
+		{
+			return View();
+		}
 	}
 }

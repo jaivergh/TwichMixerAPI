@@ -48,6 +48,7 @@ namespace TwitchAPI
 			}
 
 			app.UseHttpsRedirection();
+			app.UseDefaultFiles();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 

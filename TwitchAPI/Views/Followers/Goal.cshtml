@@ -102,12 +102,20 @@
 				$.ajax({
 					url: "/api/Followers"
 				}).done(function (data) {
-					debugger;
+					//debugger;
 					document.getElementsByClassName("current")[0].textContent = data;
 					document.getElementsByClassName("current")[1].textContent = data;
 					document.getElementById("progress").style.width = (fullBarWidth * parseInt(data, 10) / goalValue) + "px";
 				})
 			}, 5000)
+
+
+			if (window.self == window.top) {
+				console.log("Topmost window - enabling SignalR (there is not signalR)");
+			}
+			else {
+				console.log("Hosted in a frame - disabling SignaR (there is not signalR)");
+			}
 		});
 	</script>
 
